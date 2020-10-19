@@ -1,3 +1,26 @@
+<?php
+
+require_once('config.php');
+
+$created = date( "Y/m/d H:i:s" );
+$modified = date( "Y/m/d H:i:s" );
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	
+	$dbh = new PDO(DSN, DB_USERNAME, DB_PASSWORD);
+$statement = $dbh->prepare("insert into posts (title, body, created, modified) values (:title, :body, :created, :modified)");
+$statement->bindParam(":title", $_POST['title']);
+$statement->bindParam(":body", $_POST['body']);
+$statement->bindParam(":created", $created);
+$statement->bindParam(":modified", $modified);
+$statement->execute();
+
+header('Location: http://localhost/flash_note/index.php');
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -22,22 +45,3 @@
 </body>
 </html>
 
-<?php
-
-require_once('config.php');
-
-$created = date( "Y/m/d H:i:s" );
-$modified = date( "Y/m/d H:i:s" );
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	
-	$dbh = new PDO(DSN, DB_USERNAME, DB_PASSWORD);
-$statement = $dbh->prepare("insert into posts (title, body, created, modified) values (:title, :body, :created, :modified)");
-$statement->bindParam(":title", $_POST['title']);
-$statement->bindParam(":body", $_POST['body']);
-$statement->bindParam(":created", $created);
-$statement->bindParam(":modified", $modified);
-$statement->execute();
-
-header('Location: http://localhost/flash_note/index.php');
-}

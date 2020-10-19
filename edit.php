@@ -8,6 +8,20 @@ $sql = 'select * from posts where id =' . $id;
 $stmt = $dbh->query($sql);
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
+if(isset($_POST['body']) || isset($_POST['title'])){
+	$title = $_POST['title'];
+    $body = $_POST['body'];
+
+    $sql = "UPDATE posts SET title = ?, body = ? WHERE id = ?";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindValue(1, $title);
+    $stmt->bindValue(2, $body);
+    $stmt->bindValue(3, $id);
+    $stmt->execute();
+
+    header('Location: http://localhost/flash_note/index.php');
+}
+
 
 ?>
 
@@ -34,21 +48,3 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
 </html>
-
-<?php
-
-if(isset($_POST['body']) || isset($_POST['title'])){
-	$title = $_POST['title'];
-    $body = $_POST['body'];
-
-    $sql = "UPDATE posts SET title = ?, body = ? WHERE id = ?";
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindValue(1, $title);
-    $stmt->bindValue(2, $body);
-    $stmt->bindValue(3, $id);
-    $stmt->execute();
-
-    header('Location: http://localhost/flash_note/index.php');
-}
-
-
